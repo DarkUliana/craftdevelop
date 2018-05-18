@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+
+Host: craftdevelop.com
+
+Sitemap: http://craftdevelop.com/sitemap.xml
