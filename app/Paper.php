@@ -1,0 +1,78 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+use Laraveldaily\Quickadmin\Observers\UserActionsObserver;
+use Dimsav\Translatable\Translatable;
+
+use Carbon\Carbon; 
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Paper extends Model {
+
+    use SoftDeletes;
+    use Translatable;
+
+    public $translatedAttributes = ['title', 'text_preview', 'text'];
+
+    public $translationModel = 'App\Models\PaperTranslation';
+
+    /**
+    * The attributes that should be mutated to dates.
+    *
+    * @var array
+    */
+    protected $dates = ['deleted_at'];
+
+    protected $table    = 'papers';
+    
+    protected $guarded = [];
+
+
+    public static function boot()
+    {
+        parent::boot();
+
+        Paper::observe(new UserActionsObserver);
+    }
+    
+    public function tag()
+    {
+        return $this->hasOne('App\Tags', 'id', 'tag_id');
+    }
+
+
+    
+    /**
+     * Set attribute to date format
+     * @param $input
+     */
+    public function setDateAttribute($input)
+    {
+        if($input != '') {
+            $this->attributes['date'] = Carbon::createFromFormat(config('quickadmin.date_format'), $input)->format('Y-m-d');
+        }else{
+            $this->attributes['date'] = '';
+        }
+    }
+
+    /**
+     * Get attribute from date format
+     * @param $input
+     *
+     * @return string
+     */
+    public function getDateAttribute($input)
+    {
+        if($input != '0000-00-00') {
+            return Carbon::createFromFormat('Y-m-d', $input)->format(config('quickadmin.date_format'));
+        }else{
+            return '';
+        }
+    }
+
+
+    
+}

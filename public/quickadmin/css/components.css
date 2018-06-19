@@ -960,7 +960,7 @@ h4,
 h5,
 h6 {
   font-family: "Open Sans", sans-serif;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 h1 {
@@ -3388,7 +3388,7 @@ input[type="color"].spinner {
 
 /* Form labels */
 label {
-  font-weight: 400;
+  font-weight: 800;
   font-size: 14px;
 }
 
@@ -4285,6 +4285,7 @@ Customized Bootstrap Pagination
 Customized Bootstrap Panels
 ***/
 .panel {
+  font-size: 20px;
   -webkit-box-shadow: none !important;
   -moz-box-shadow: none !important;
   box-shadow: none !important;
