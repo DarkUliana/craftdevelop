@@ -24,7 +24,7 @@ class CreatePapersRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'titile' => 'required', 
+//            'title' => 'required',
             'tag_id' => 'required', 
             
 		];

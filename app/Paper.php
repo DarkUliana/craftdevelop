@@ -17,7 +17,7 @@ class Paper extends Model {
 
     public $translatedAttributes = ['title', 'text_preview', 'text'];
 
-    public $translationModel = 'App\Models\PaperTranslation';
+    public $translationModel = 'App\PaperTranslation';
 
     /**
     * The attributes that should be mutated to dates.
@@ -31,20 +31,23 @@ class Paper extends Model {
     protected $guarded = [];
 
 
-    public static function boot()
-    {
-        parent::boot();
-
-        Paper::observe(new UserActionsObserver);
-    }
+//    public static function boot()
+//    {
+//        parent::boot();
+//
+//        Paper::observe(new UserActionsObserver);
+//    }
     
     public function tag()
     {
         return $this->hasOne('App\Tags', 'id', 'tag_id');
     }
 
+    public function albumImages()
+    {
+        return $this->hasMany('App\Album', 'paper_id', 'id');
+    }
 
-    
     /**
      * Set attribute to date format
      * @param $input
@@ -73,6 +76,4 @@ class Paper extends Model {
         }
     }
 
-
-    
 }

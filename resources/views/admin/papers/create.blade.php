@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    {!! Form::open(array('route' => config('quickadmin.route').'.papers.store', 'id' => 'form-with-validation')) !!}
+    {!! Form::open(array('route' => config('quickadmin.route').'.papers.store', 'id' => 'form-with-validation', 'enctype' => 'multipart/form-data')) !!}
 
     {{--<div class="col-sm-10 col-sm-offset-1">--}}
         {{--<ul class="nav nav-tabs">--}}

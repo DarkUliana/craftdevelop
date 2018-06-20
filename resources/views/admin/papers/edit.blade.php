@@ -16,42 +16,42 @@
     </div>
 </div>
 
-{!! Form::model($papers, array('class' => 'form-horizontal', 'id' => 'form-with-validation', 'method' => 'PATCH', 'route' => array(config('quickadmin.route').'.papers.update', $papers->id))) !!}
+{!! Form::model($paper, array('class' => 'form-horizontal', 'id' => 'form-with-validation', 'method' => 'PATCH', 'enctype' => 'multipart/form-data', 'route' => array(config('quickadmin.route').'.papers.update', $paper->id))) !!}
 
 <div class="form-group">
     {!! Form::label('title', 'title*', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::text('title', old('title',$papers->title), array('class'=>'form-control')) !!}
+        {!! Form::text('title', old('title',$paper->title), array('class'=>'form-control')) !!}
         
     </div>
 </div><div class="form-group">
     {!! Form::label('text_preview', 'text preview', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::textarea('text_preview', old('text_preview',$papers->text_preview), array('class'=>'form-control')) !!}
+        {!! Form::textarea('text_preview', old('text_preview',$paper->text_preview), array('class'=>'form-control')) !!}
         
     </div>
 </div><div class="form-group">
     {!! Form::label('text', 'text', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::textarea('text', old('text',$papers->text), array('class'=>'form-control ckeditor')) !!}
+        {!! Form::textarea('text', old('text',$paper->text), array('class'=>'form-control ckeditor')) !!}
         
     </div>
 </div><div class="form-group">
     {!! Form::label('tag_id', 'tag*', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::select('tag_id', $tag, old('tag_id',$papers->tag_id), array('class'=>'form-control')) !!}
+        {!! Form::select('tag_id', $tag, old('tag_id',$paper->tag_id), array('class'=>'form-control')) !!}
         
     </div>
 </div><div class="form-group">
     {!! Form::label('date', 'date', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::text('date', old('date',$papers->date), array('class'=>'form-control datepicker')) !!}
+        {!! Form::text('date', old('date',$paper->date), array('class'=>'form-control datepicker')) !!}
         
     </div>
 </div><div class="form-group">
     {!! Form::label('views', 'number of views', array('class'=>'col-sm-2 control-label')) !!}
     <div class="col-sm-10">
-        {!! Form::text('views', old('views',$papers->views), array('class'=>'form-control')) !!}
+        {!! Form::text('views', old('views',$paper->views), array('class'=>'form-control')) !!}
         
     </div>
 </div>
