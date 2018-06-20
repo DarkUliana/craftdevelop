@@ -3,16 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Laraveldaily\Quickadmin\Observers\UserActionsObserver;
 use Dimsav\Translatable\Translatable;
 
 use Carbon\Carbon; 
 
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Paper extends Model {
 
-    use SoftDeletes;
     use Translatable;
 
     public $translatedAttributes = ['title', 'text_preview', 'text'];
@@ -24,7 +21,6 @@ class Paper extends Model {
     *
     * @var array
     */
-    protected $dates = ['deleted_at'];
 
     protected $table    = 'papers';
     

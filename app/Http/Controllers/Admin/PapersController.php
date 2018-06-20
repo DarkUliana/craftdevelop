@@ -58,43 +58,15 @@ class PapersController extends Controller
      */
     public function store(Request $request)
     {
-        $main_img = $request->file('pictures.main_picture');
-        $filename = time() . '.' . $main_img->getClientOriginalExtension();
-        $path = public_path('img/blog/' . $filename);
-        $previewPath = public_path('img/blog/previews/' . $filename);
-        $img = Image::make($main_img->getRealPath());
-        $img->save($path);
-        $img->crop((int)$request->pictures['w'], (int)$request->pictures['h'], (int)$request->pictures['x'], (int)$request->pictures['y']);
-        $img->save($previewPath);
-
         $paperData = $request->all();
         unset($paperData['pictures']);
         unset($paperData['translations']);
-        $paperData['image'] = $filename;
+        $paperData['image'] = $this->createMainImage($request);
 
         $paper = Paper::create($paperData);
 
-
-        foreach ($request->file('pictures.album') as $picture) {
-
-            $filename = time() . '.' . $picture->getClientOriginalExtension();
-            $path = public_path('img/blog/albums/' . $filename);
-            $img = Image::make($picture->getRealPath());
-
-            $img->save($filename);
-
-            $albumImage = new Album(['image' => $path]);
-            $paper->albumImages()->save($albumImage);
-        }
-
-        foreach ($request->translations as $key => $value) {
-
-            $translation = $value;
-            $translation['locale'] = $key;
-
-            $translationObj = new PaperTranslation($translation);
-            $paper->translations()->save($translationObj);
-        }
+        $this->createPaperTranslations($request, $paper);
+        $this->createPaperAlbum($request, $paper);
 
         return redirect()->route(config('quickadmin.route') . '.papers.index');
     }
@@ -124,10 +96,26 @@ class PapersController extends Controller
      */
     public function update($id, UpdatePapersRequest $request)
     {
-        $paper = Paper::findOrFail($id);
+        $paper = Paper::find($id);
 
+        $paper->translations()->delete();
 
-        $paper->update($request->all());
+        $paperData = $request->all();
+        unset($paperData['pictures']);
+        unset($paperData['translations']);
+
+        if($request->hasFile('pictures.main_picture')) {
+            $paperData['image'] = $this->createMainImage($request);
+        }
+
+        if($request->hasFile('pictures.album')) {
+            $paper->albumImages()->delete();
+            $this->createPaperAlbum($request, $paper);
+        }
+
+        $paper->update($paperData);
+
+        $this->createPaperTranslations($request, $paper);
 
         return redirect()->route(config('quickadmin.route') . '.papers.index');
     }
@@ -141,7 +129,12 @@ class PapersController extends Controller
      */
     public function destroy($id)
     {
-        Paper::destroy($id);
+        $paper = Paper::find($id);
+
+        $this->deletePaperAlbum($paper);
+        $paper->translations()->delete();
+
+        $paper->delete();
 
         return redirect()->route(config('quickadmin.route') . '.papers.index');
     }
@@ -154,13 +147,19 @@ class PapersController extends Controller
      */
     public function massDelete(Request $request)
     {
+        $ids = [];
         if ($request->get('toDelete') != 'mass') {
-            $toDelete = json_decode($request->get('toDelete'));
-            Paper::destroy($toDelete);
+
+            $ids = json_decode($request->get('toDelete'));
         } else {
-            Paper::whereNotNull('id')->delete();
+
+            $ids = Paper::all()->pluck('id');
         }
 
+        foreach ($ids as $id) {
+
+            $this->destroy($id);
+        }
         return redirect()->route(config('quickadmin.route') . '.papers.index');
     }
 
@@ -175,4 +174,63 @@ class PapersController extends Controller
 
         return $array;
     }
+
+    protected function deletePaperAlbum($paper)
+    {
+
+        Storage::delete([public_path('img/blog/previews/' . $paper->image), public_path('img/blog/' . $paper->image)]);
+
+        foreach ($paper->albumImages as $image) {
+
+            Storage::delete(public_path('img/blog/albums/' . $image->image));
+        }
+
+        $paper->albumImages()->delete();
+
+    }
+
+    protected function createPaperAlbum(Request $request, $paper)
+    {
+
+        foreach ($request->file('pictures.album') as $picture) {
+
+            $filename = uniqid() . '.' . $picture->getClientOriginalExtension();
+            $path = public_path('img/blog/albums/' . $filename);
+            $img = Image::make($picture->getRealPath());
+
+            $img->save($path);
+
+            $albumImage = new Album(['image' => $filename]);
+            $paper->albumImages()->save($albumImage);
+        }
+    }
+
+    protected function createPaperTranslations(Request $request, $paper)
+    {
+
+        foreach ($request->translations as $key => $value) {
+
+            $translation = $value;
+            $translation['locale'] = $key;
+
+            $translationObj = new PaperTranslation($translation);
+            $paper->translations()->save($translationObj);
+        }
+    }
+
+    protected function createMainImage(Request $request)
+    {
+
+        $main_img = $request->file('pictures.main_picture');
+        $filename = uniqid() . '.' . $main_img->getClientOriginalExtension();
+        $path = public_path('img/blog/' . $filename);
+        $previewPath = public_path('img/blog/previews/' . $filename);
+        $img = Image::make($main_img->getRealPath());
+        $img->save($path);
+        $img->crop((int)$request->pictures['w'], (int)$request->pictures['h'], (int)$request->pictures['x'], (int)$request->pictures['y']);
+        $img->save($previewPath);
+
+        return $filename;
+    }
+
 }

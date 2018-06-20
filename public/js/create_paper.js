@@ -1,4 +1,5 @@
 var loadFile = function (event) {
+    $('')
     $('#borders').removeClass('display-none');
     $('#add-crop').append('<img id="crop" style="background-color:#b8b8b8; max-width: 100%;"/>');
     var output = document.getElementById('crop');
@@ -37,10 +38,32 @@ var loadFiles = function (e) {
 };
 
 function updateCoords(c) {
-    $('#x').val(c.x);
-    $('#y').val(c.y);
-    $('#w').val(c.w);
-    $('#h').val(c.h);
+
+    var naturalWidth = document.getElementById('crop').naturalWidth;
+    var naturalHeight = document.getElementById('crop').naturalHeight;
+    var currentWidth = $('#crop').width();
+    var currentHeight = $('#crop').height();
+
+    var widthProportions = 1;
+    var heightProportions = 1;
+
+    if (naturalWidth > currentWidth) {
+
+        widthProportions = naturalWidth / currentWidth ;
+        heightProportions = naturalHeight / currentHeight;
+    }
+
+    // console.log('proportions: ' + proportions);
+    console.log('naturalWidth: ' + widthProportions);
+    console.log('currentWidth: ' + heightProportions);
+
+
+    $('#x').val(c.x * widthProportions);
+    $('#y').val(c.y * widthProportions);
+    $('#w').val(c.w * widthProportions);
+    $('#h').val(c.h * heightProportions);
+
+
 };
 
 $(document).ready(function () {
@@ -50,8 +73,6 @@ $(document).ready(function () {
         loadFile(e);
 
     });
-
-
 
 
 });

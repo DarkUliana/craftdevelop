@@ -50,12 +50,21 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Головне зображення:</label>
-                        <img src="{{ isset($paper) ? asset('/img/blog/' . $paper->image) : '' }}">
-                        <img src="{{ isset($paper) ? asset('/img/blog/previews/') . $paper->image : '' }}">
+                        <br/>
+                        <div id="mainImage">
+                            @isset($paper)
+                                <img src="{{ asset('/img/blog/' . $paper->image) }}"
+                                     class="img-thumbnail" style="max-width: 400px; margin: 10px">
+                                <img src="{{ asset('/img/blog/previews/'. $paper->image) }}"
+                                     class="img-thumbnail" style="max-width: 400px; margin: 10px">
+                            @endisset
+                        </div>
                         <input id="load_button" type="file" name="pictures[main_picture]" accept="image/*" class="file"
                                onchange="loadFile(event)">
-                        <div id="borders" class="display-none" style="font-weight: bold; margin-top: 20px">Виберіть межі для прев'ю:</div>
-                        <div class="col-md-5" id="add-crop">
+                        <div id="borders" class="display-none" style="font-weight: bold; margin-top: 20px">Виберіть межі
+                            для прев'ю:
+                        </div>
+                        <div class="col-md-12" id="add-crop">
                             <input id="delselect" type="button" value="&#215; Видалити прев'ю"
                                    style=" display: none; background-color:#f8f8f8;margin-top: 10px; border-top-left-radius: 10px; border-top-right-radius: 10px; outline: none"
                                    required>
@@ -76,13 +85,15 @@
                 <div class="row">
                     <div class="col-md-12">
                         {!! Form::label('album', 'Album images*', array('class'=>'control-label')) !!}
-                        <input id="album" type="file" name="pictures[album][]" accept="image/*" onchange="albumPreview(this);"
+                        <input id="album" type="file" name="pictures[album][]" accept="image/*"
+                               onchange="albumPreview(this);"
                                class="file" multiple>
                     </div>
                     <div class="col-md-12" id="albumImages">
                         @isset($paper)
                             @foreach($paper->albumImages as $image)
-                                <img class="img-thumbnail" style="max-height: 100px" src="{{ asset($image->image) }}">
+                                <img class="img-thumbnail" style="max-height: 100px"
+                                     src="{{ asset('img/blog/albums/' . $image->image) }}">
                             @endforeach
                         @endisset
                     </div>
