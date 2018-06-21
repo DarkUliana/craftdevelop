@@ -37,6 +37,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.standalone.min.css"/>
     <link rel="stylesheet"
           href="{{ asset('css/jquery.Jcrop.min.css') }}"/>
+    <link rel="stylesheet"
+          href="{{ asset('css/MonthPicker.css') }}"/>
 </head>
 
 <body class="page-header-fixed">

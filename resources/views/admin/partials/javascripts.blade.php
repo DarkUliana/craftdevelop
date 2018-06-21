@@ -8,6 +8,8 @@
 <script src="{{ url('quickadmin/js') }}/main.js"></script>
 <script src="{{ asset('js/jquery.Jcrop.min.js') }}"></script>
 <script src="{{ asset('js/create_paper.js') }}"></script>
+<script src="{{ asset('js/road.js') }}"></script>
+<script src="{{ asset('js/MonthPicker.js') }}"></script>
 
 <script>
 
