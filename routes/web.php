@@ -12,7 +12,15 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('page', ['title' => 'Index page']);
 });
 
-//Route::get('/blog', '');
+Route::get('/blog', 'MainController@blog');
+Route::get('/roadmap', 'MainController@roadmap');
+Route::get('/policy', 'MainController@policy');
+Route::get('/papers', 'MainController@papers');
+
+
+
+
+Route::get('setlocale/{locale}', 'MainController@setLocale');
