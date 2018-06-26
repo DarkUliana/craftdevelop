@@ -13,6 +13,10 @@ class RoadPoint extends Model {
 
     protected $table = 'roadpoints';
     protected $guarded = [];
+    protected $appends = [
+        'month',
+        'year'
+    ];
 
     public static function boot()
     {
@@ -48,11 +52,8 @@ class RoadPoint extends Model {
      */
     public function getDateAttribute($input)
     {
-        if($input != '0000-00-00') {
-            return Carbon::createFromFormat('Y-m-d', $input)->format(config('quickadmin.date_format'));
-        }else{
-            return '';
-        }
+
+        return new Carbon($input);
     }
 
     public function tag()
@@ -62,7 +63,7 @@ class RoadPoint extends Model {
 
     public function cards()
     {
-        return $this->hasMany('App\RoadCard', 'roadmap_id', 'id');
+        return $this->hasMany('App\RoadCard', 'roadpoint_id', 'id');
     }
     
 }
