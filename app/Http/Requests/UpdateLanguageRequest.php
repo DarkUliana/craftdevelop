@@ -25,7 +25,8 @@ class UpdateLanguageRequest extends FormRequest {
 	{
 		return [
             'code' => 'required', 
-            'name' => 'required', 
+            'name' => 'required',
+            'menu_name' => 'required'
             
 		];
 	}

@@ -18,7 +18,9 @@ Route::get('/', function () {
 Route::get('/blog', 'MainController@blog');
 Route::get('/roadmap', 'MainController@roadmap');
 Route::get('/policy', 'MainController@policy');
-Route::get('/papers', 'MainController@papers');
+//Route::get('/papers', 'MainController@papers');
+Route::get('/get-papers', 'MainController@papers');
+Route::get('/article/{article}', 'MainController@paper');
 
 
 

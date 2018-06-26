@@ -22,6 +22,21 @@ class MainController extends Controller
         return view('blog', compact('tags', 'title', 'papers', 'locale'));
     }
 
+    public function papers(Request $request)
+    {
+
+        if (isset($request->tag)) {
+
+            $locale = Cookie::get('locale');
+            $tagId = Tags::where('name', $request->tag)->first()->id;
+            $papers = Paper::where('tag_id', $tagId)->get();
+
+            return view('partials.papers', compact('papers', 'locale'));
+        }
+
+        return response('Invalid data', 400);
+    }
+
     public function roadmap()
     {
         $title = 'Roadmap';
@@ -30,11 +45,6 @@ class MainController extends Controller
 //        var_dump($points); die();
 
         return view('roadmap', compact('title', 'tags', 'points'));
-    }
-
-    public function papers(Request $request)
-    {
-
     }
 
     public function setLocale($locale)
