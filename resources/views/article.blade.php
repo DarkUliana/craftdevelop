@@ -5,7 +5,7 @@
 <section class="blog">
     <div class="container container--small">
         <h1 class="page-title">
-            <span class="page-title__text">{{ $paper->translate($localization)->title }}</span>
+            <span class="page-title__text">{{ $paper->translate($locale)->title }}</span>
             <span class="page-title__bg">Article</span>
         </h1>
         <nav aria-label="breadcrumb">
@@ -17,7 +17,7 @@
                     <a class="breadcrumb__link" href="{{ url('/blog') }}">Blog</a>
                 </li>
                 <li class="breadcrumb__item">
-                    <a class="breadcrumb__link" href="{{ url('article/' . $paper->id) }}">{{ $paper->translate($localization)->title }}</a>
+                    <a class="breadcrumb__link" href="{{ url('article/' . $paper->id) }}">{{ $paper->translate($locale)->title }}</a>
                 </li>
             </ul>
         </nav>
@@ -66,10 +66,10 @@
                                 <strong class="tag tag--active">{{ $item->tag->name }}</strong>
                             </div>
                             <div class="article__content-item">
-                                <h2 class="article__title">{{ $item->translate($localization)->title }}</h2>
+                                <h2 class="article__title">{{ $item->translate($locale)->title }}</h2>
                             </div>
                             <div class="article__content-item">
-                                <p class="article__text">{{ $item->translate($localization)->preview }}</p>
+                                <p class="article__text">{{ $item->translate($locale)->preview }}</p>
                             </div>
                             <div class="article__content-item row">
                                 <a class="btn btn--transition btn--light" href="{{ url('article/' . $item->id) }}">Read Article</a>

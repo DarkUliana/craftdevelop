@@ -29,10 +29,11 @@
                     </li>
                 </ul>
                 <div class="dropdown main-nav__dropdown">
-                    <button class="btn btn--dark dropdown__toggle" type="button"> Eng</button>
+                    <button class="btn btn--dark dropdown__toggle" type="button">{{ $languages[$locale] }}</button>
                     <div class="dropdown__menu">
-                        <a class="dropdown__item dropdown__item--disabled" href="#">Eng</a>
-                        <a class="dropdown__item" href="#">Rus</a>
+                        @foreach($languages as $key => $language)
+                            <a class="dropdown__item {{ $key==$locale?'dropdown__item--disabled':'' }}" href="{{ url('setlocale/'.$key) }}">{{ $language }}</a>
+                        @endforeach
                     </div>
                 </div>
             </nav>

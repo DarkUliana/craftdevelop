@@ -20,16 +20,10 @@ class Locale
     public function handle($request, Closure $next)
     {
 
-        $raw_locale = Cookie::get('locale');
+        if(!Cookie::get('locale')) {
 
-        if (in_array($raw_locale, Config::get('app.locales'))) {
-            $locale = $raw_locale;
+            return $next($request)->withCookie(Cookie::make('locale', 'en'));
         }
-        else {
-            $locale = Config::get('app.locale');
-        }
-
-        App::setLocale(Config::get('app.locale'));
 
         return $next($request);
     }

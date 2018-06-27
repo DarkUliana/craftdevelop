@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('page', ['title' => 'Index page']);
-});
+Route::get('/', 'MainController@index');
 
 Route::get('blog', 'MainController@blog');
 
