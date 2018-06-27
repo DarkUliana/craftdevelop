@@ -22,7 +22,8 @@ class Locale
 
         if(!Cookie::get('locale')) {
 
-            return $next($request)->withCookie(Cookie::make('locale', 'en'));
+            $cookie = Cookie::make('locale', 'en');
+            return $next($request)->withCookie($cookie);
         }
 
         return $next($request);

@@ -16,7 +16,7 @@ class MainController extends Controller
     public function index()
     {
         $languages = $this->getLanguages();
-        $locale = Cookie::get('locale');
+        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
         $title = 'Index page';
         return view('page', compact('title', 'languages', 'locale'));
     }
@@ -25,8 +25,7 @@ class MainController extends Controller
     {
 
         $perPage = Config::get('per_page', 3);
-        $locale = Cookie::get('locale');
-
+        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
 
         if ($request->ajax()) {
 
@@ -58,7 +57,7 @@ class MainController extends Controller
             return response('Invalid data', 400);
         }
 
-        $locale = Cookie::get('locale');
+        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
         $tagId = Tags::where('name', $request->tag)->first()->id;
         $papers = Paper::where('tag_id', $tagId)->get();
 
@@ -73,7 +72,7 @@ class MainController extends Controller
 
         if ($paper) {
 
-            $locale = Cookie::get('locale');
+            $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
             $related = Paper::where('id', '<', $id)->limit(3)->get();
 
             return view('article', compact('paper', 'locale', 'related'));
@@ -87,7 +86,7 @@ class MainController extends Controller
         $title = 'Roadmap';
         $tags = Tags::all();
         $languages = $this->getLanguages();
-        $locale = Cookie::get('locale');
+        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
 
         if (empty($tag)) {
 
