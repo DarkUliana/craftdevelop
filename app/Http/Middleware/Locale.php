@@ -19,14 +19,17 @@ class Locale
      */
     public function handle($request, Closure $next)
     {
+
         $raw_locale = Cookie::get('locale');
 
         if (in_array($raw_locale, Config::get('app.locales'))) {
             $locale = $raw_locale;
         }
-        else $locale = Config::get('app.locale');
+        else {
+            $locale = Config::get('app.locale');
+        }
 
-        App::setLocale($locale);
+        App::setLocale(Config::get('app.locale'));
 
         return $next($request);
     }

@@ -1,0 +1,1 @@
+<a href="{{ $paginator->url($paginator->currentPage()+1) }}" class="blog-layout__btn btn btn--transition-simple" type="button">Show More</a>

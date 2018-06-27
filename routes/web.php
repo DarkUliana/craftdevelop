@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::get('blog', 'MainController@blog');
 
 Route::get('roadmap', 'MainController@roadmap');
+Route::get('roadmap/{tag}', 'MainController@roadmap');
 Route::get('get-points', 'MainController@points');
 
 Route::get('get-papers', 'MainController@papers');

@@ -19,7 +19,7 @@
 
             @include('partials.papers')
 
-            <button class="blog-layout__btn btn btn--transition-simple" type="button">Show More</button>
+            {{ $papers->appends(['tag' => $active])->links('partials.pagination') }}
         </div>
     </div>
 </section>

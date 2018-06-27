@@ -10,9 +10,9 @@
             </h1>
             <div class="tags">
                 @foreach($tags as $tag)
-                    <div class="tags__item">
-                        <span class="tag {{ $loop->first?'tag--active':'' }}">{{ $tag->name }}</span>
-                    </div>
+                    <a href="{{ url('roadmap/'.$tag->name) }}" class="tags__item">
+                        <span class="tag {{ $active==$tag->name?'tag--active':'' }}">{{ $tag->name }}</span>
+                    </a>
                 @endforeach
             </div>
             <div id="roadmap" class="roadmap">

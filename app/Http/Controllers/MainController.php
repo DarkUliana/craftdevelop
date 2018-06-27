@@ -11,15 +11,32 @@ use Illuminate\Support\Facades\Cookie;
 
 class MainController extends Controller
 {
-    public function blog()
+    public function blog(Request $request)
     {
 
-        $locale = Cookie::get('locale') or Config::get('locale');
+        $perPage = Config::get('per_page', 3);
+        $locale = Config::get('app.locale');
         $title = 'Blog';
         $tags = Tags::all();
-        $papers = Paper::where('tag_id', $tags->first()->id)->get();
 
-        return view('blog', compact('tags', 'title', 'papers', 'locale'));
+        if ($request->ajax()) {
+
+            $tagId = Tags::where('name', $request->tag)->first()->id;
+            $papers = Paper::where('tag_id', $tagId)->paginate($perPage);
+            $locale = Config::get('locale');
+            $return = [
+
+                'papers' => (string)view('partials.papers', compact('papers', 'locale')),
+                'nextPageUrl' => url('blog?page=' . ($request->page+1) . '&tag=' . $tags->first()->name)
+            ];
+
+            return $return;
+        }
+
+        $papers = Paper::where('tag_id', $tags->first()->id)->paginate($perPage);
+        $active = $tags->first()->name;
+
+        return view('blog', compact('tags', 'title', 'papers', 'locale', 'active'));
     }
 
     public function papers(Request $request)
@@ -30,7 +47,7 @@ class MainController extends Controller
             return response('Invalid data', 400);
         }
 
-        $locale = Cookie::get('locale');
+        $locale = Config::get('app.locale');
         $tagId = Tags::where('name', $request->tag)->first()->id;
         $papers = Paper::where('tag_id', $tagId)->get();
 
@@ -45,7 +62,7 @@ class MainController extends Controller
 
         if ($paper) {
 
-            $localization = Cookie::get('localization');
+            $localization = Config::get('app.locale');
             $related = Paper::where('id', '<', $id)->limit(3)->get();
 
             return view('article', compact('paper', 'localization', 'related'));
@@ -54,15 +71,25 @@ class MainController extends Controller
         abort(404);
     }
 
-    public function roadmap()
+    public function roadmap($tag = '')
     {
         $title = 'Roadmap';
         $tags = Tags::all();
-        $pastPoints = RoadPoint::where('tag_id', $tags->first()->id)->where('done', 1)->get();
-        $futurePoints = RoadPoint::where('tag_id', $tags->first()->id)->where('done', 0)->get();
 
-//        var_dump($pastPoints->merge($futurePoints)); die();
-        return view('roadmap', compact('title', 'tags', 'pastPoints', 'futurePoints'));
+        if (empty($tag)) {
+
+            $active = $tags->first()->name;
+            $pastPoints = RoadPoint::where('tag_id', $tags->first()->id)->where('done', 1)->get();
+            $futurePoints = RoadPoint::where('tag_id', $tags->first()->id)->where('done', 0)->get();
+        } else {
+
+            $tag = Tags::where('name', $tag)->first();
+            $active = $tag->name;
+            $pastPoints = RoadPoint::where('tag_id', $tag->id)->where('done', 1)->get();
+            $futurePoints = RoadPoint::where('tag_id', $tag->id)->where('done', 0)->get();
+        }
+
+        return view('roadmap', compact('title', 'tags', 'pastPoints', 'futurePoints', 'active'));
     }
 
     public function points(Request $request)
@@ -72,17 +99,16 @@ class MainController extends Controller
             return response('Invalid data', 400);
         }
 
-        $pastPoints = RoadPoint::where('tag_id', Tags::where('name', $request->tag)->first()->id)->where('done', 1)->get();
-        $futurePoints = RoadPoint::where('tag_id', Tags::where('name', $request->tag)->first()->id)->where('done', 0)->get();
+        $tagId = Tags::where('name', $request->tag)->first()->id;
+        $pastPoints = RoadPoint::where('tag_id', $tagId)->where('done', 1)->get();
+        $futurePoints = RoadPoint::where('tag_id', $tagId)->where('done', 0)->get();
 
-//        $return = [
-//            'points' => (String)view('partials.points', compact('pastPoints', 'futurePoints')),
-//            'cards' => (String)view('partials.cards', compact('pastPoints', 'futurePoints'))
-//        ];
-//        var_dump($return); die();
-//        var_dump(view('partials.points', compact('pastPoints', 'futurePoints'))); die();
+        $return = [
+            'points' => (string)view('partials.points', compact('pastPoints', 'futurePoints')),
+            'cards' => (string)view('partials.cards', compact('pastPoints', 'futurePoints'))
+        ];
 
-        return view('partials.points', compact('pastPoints', 'futurePoints'));
+        return response($return, 200);
     }
 
     public function setLocale($locale)

@@ -10,10 +10,6 @@ use Laraveldaily\Quickadmin\Observers\UserActionsObserver;
 
 class Tags extends Model {
 
-    
-
-    
-
     protected $table    = 'tags';
     
     protected $fillable = ['name'];
@@ -26,7 +22,10 @@ class Tags extends Model {
         Tags::observe(new UserActionsObserver);
     }
     
-    
+    public function roadpoints()
+    {
+        return $this->hasMany('App\Roadpoint', 'tag_id', 'id');
+    }
     
     
 }
