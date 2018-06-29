@@ -13,7 +13,7 @@
             </div>
             <div class="article__content-item">{{ $paper->translate($locale)->text_preview }}</div>
             <div class="article__content-item row">
-                <a class="btn btn--transition btn--light" href="{{ url('article/' . $paper->id) }}">Read Article</a>
+                <a class="btn btn--transition btn--light" href="{{ url('article/' . $paper->id) }}">{{ $keys['read_article']->translate($locale)->name }}</a>
                 <div class="article__info">
                     <span class="date">{{ $paper->date }}</span>
                     <span class="view">{{ $paper->views }}</span>

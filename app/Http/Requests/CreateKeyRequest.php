@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateRoadPointRequest extends FormRequest {
+class CreateKeyRequest extends FormRequest {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -24,10 +24,8 @@ class CreateRoadPointRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'translations.*.name' => 'required|string',
-            'date' => 'required',
-            'tag_id' => 'required',
-            
+            'key' => 'required|alpha_dash|unique:key,key,'.$this->key,
+            'translations.*.name' => 'required|string'
 		];
 	}
 }

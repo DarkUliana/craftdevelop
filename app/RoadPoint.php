@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Laraveldaily\Quickadmin\Observers\UserActionsObserver;
 
@@ -10,6 +11,14 @@ use Carbon\Carbon;
 
 
 class RoadPoint extends Model {
+
+    use Translatable;
+
+    public $translatedAttributes = ['name'];
+
+    public $translationModel = 'App\RoadPointTranslation';
+
+    public $translationForeignKey = 'roadpoint_id';
 
     protected $table = 'roadpoints';
     protected $guarded = [];

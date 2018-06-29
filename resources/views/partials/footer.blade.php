@@ -2,7 +2,7 @@
     <div class="container">
         <div class="main-footer__wrap">
             <div class="main-footer-item">
-                <button id="modal-btn" class="btn btn--transition btn--dark" type="button">Leave Message</button>
+                <button id="modal-btn" class="btn btn--transition btn--dark" type="button">{{ $keys['msg']->translate($locale)->name }}</button>
             </div>
             <div class="main-footer-item">
                 <div class="contacts">

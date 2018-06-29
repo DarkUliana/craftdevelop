@@ -4,7 +4,7 @@
 
     <div class="row">
         <div class="col-sm-10 col-sm-offset-1">
-            <h1>{{ trans('quickadmin::templates.templates-view_create-add_new') }}</h1>
+            <h1>{{ trans('quickadmin::templates.templates-view_edit-edit') }}</h1>
 
             @if ($errors->any())
                 <div class="alert alert-danger">
@@ -16,8 +16,14 @@
         </div>
     </div>
 
-    {!! Form::open(array('route' => config('quickadmin.route').'.roadpoint.store', 'id' => 'form-with-validation')) !!}
+    {!! Form::model($key, array('id' => 'form-with-validation', 'method' => 'PATCH', 'route' => array(config('quickadmin.route').'.key.update', $key->id))) !!}
     <div class="col-sm-10 col-sm-offset-1">
+        <div class="form-group">
+            {!! Form::label('key', 'key*', array('class'=>'col-sm-2 control-label')) !!}
+
+            {!! Form::text('key', old('key',$key->key), array('class'=>'form-control')) !!}
+        </div>
+
         <div class="panel panel-success" style="border-radius: 5px !important; border: solid 3px #d6e9c6;">
             <div class="panel-heading">Translations</div>
             <div class="panel-body">
@@ -38,7 +44,7 @@
                             <div class="form-group">
                                 {!! Form::label('name', 'name*', array('class'=>'control-label')) !!}
                                 {!! Form::text('translations['.$language->code.'][name]', old('name',
-                                isset($roadpoint)?$roadpoint->translate($language->code)->name:''),
+                                isset($key)?$key->translate($language->code)->name:''),
                                 array('class'=>'form-control')) !!}
                             </div>
                             </p>
@@ -49,30 +55,9 @@
         </div>
 
         <div class="form-group">
-            {!! Form::label('date', 'Date*', array('class'=>'control-label')) !!}
 
-            {!! Form::text('date', old('date'), array('class'=>'form-control yearMonth', 'autocomplete' => 'off')) !!}
-
-        </div>
-
-        <div class="form-group">
-            {!! Form::label('tag_id', 'Tag*', array('class'=>'control-label')) !!}
-
-            {!! Form::select('tag_id', $tags, old('tag'), array('class'=>'form-control')) !!}
-
-        </div>
-        <div class="form-group">
-            {!! Form::label('done', 'Done*', array('class'=>'control-label')) !!}
-
-            {!! Form::hidden('done','') !!}
-            {!! Form::checkbox('done', 1, false) !!}
-            <p class="help-block">Select to make the point black on the roadmap</p>
-
-        </div>
-
-        <div class="form-group">
-
-            {!! Form::submit( trans('quickadmin::templates.templates-view_create-create') , array('class' => 'btn btn-primary')) !!}
+            {!! Form::submit(trans('quickadmin::templates.templates-view_edit-update'), array('class' => 'btn btn-primary')) !!}
+            {!! link_to_route(config('quickadmin.route').'.key.index', trans('quickadmin::templates.templates-view_edit-cancel'), null, array('class' => 'btn btn-default')) !!}
 
         </div>
     </div>

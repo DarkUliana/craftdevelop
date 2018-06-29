@@ -19,7 +19,7 @@
 
             @include('partials.papers')
 
-            {{ $papers->appends(['tag' => $active])->links('partials.pagination') }}
+            {{ $papers->appends(['tag' => $active])->links('partials.pagination', ['keys' => $keys, 'locale' => $locale]) }}
         </div>
     </div>
 </section>

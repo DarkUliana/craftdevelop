@@ -24,9 +24,8 @@ class UpdateRoadPointRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'name' => 'required', 
-            'date' => 'required', 
-            'number' => 'required', 
+            'translations.*.name' => 'required|string',
+            'date' => 'required',
             'tag_id' => 'required',
             
 		];

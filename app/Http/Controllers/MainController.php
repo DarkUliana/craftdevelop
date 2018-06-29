@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Key;
 use App\Language;
 use App\Paper;
 use App\RoadPoint;
@@ -15,15 +16,16 @@ class MainController extends Controller
 {
     public function index()
     {
+        $keys = Key::all()->keyBy('key');
         $languages = $this->getLanguages();
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
         $title = 'Index page';
-        return view('page', compact('title', 'languages', 'locale'));
+        return view('page', compact('title', 'languages', 'locale', 'keys'));
     }
 
     public function blog(Request $request)
     {
-
+        $keys = Key::all()->keyBy('key');
         $perPage = Config::get('per_page', 3);
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
 
@@ -46,7 +48,7 @@ class MainController extends Controller
         $papers = Paper::where('tag_id', $tags->first()->id)->paginate($perPage);
         $active = $tags->first()->name;
 
-        return view('blog', compact('tags', 'title', 'papers', 'locale', 'active', 'languages'));
+        return view('blog', compact('tags', 'title', 'papers', 'locale', 'active', 'languages', 'keys'));
     }
 
     public function papers(Request $request)
@@ -57,11 +59,12 @@ class MainController extends Controller
             return response('Invalid data', 400);
         }
 
+        $keys = Key::all()->keyBy('key');
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
         $tagId = Tags::where('name', $request->tag)->first()->id;
         $papers = Paper::where('tag_id', $tagId)->get();
 
-        return view('partials.papers', compact('papers', 'locale'));
+        return view('partials.papers', compact('papers', 'locale', 'keys'));
 
     }
 
@@ -84,10 +87,11 @@ class MainController extends Controller
     public function roadmap($tag = '')
     {
         $title = 'Roadmap';
+        $keys = Key::all()->keyBy('key');
         $tags = Tags::all();
         $languages = $this->getLanguages();
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
-        setlocale(LC_TIME, 'German');
+        setlocale(LC_TIME, $locale);
 
         if (empty($tag)) {
 
@@ -102,7 +106,7 @@ class MainController extends Controller
             $futurePoints = RoadPoint::where('tag_id', $tag->id)->where('done', 0)->get();
         }
 
-        return view('roadmap', compact('title', 'tags', 'pastPoints', 'futurePoints', 'active', 'languages', 'locale'));
+        return view('roadmap', compact('title', 'tags', 'pastPoints', 'futurePoints', 'active', 'languages', 'locale', 'keys'));
     }
 
     public function points(Request $request)

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Language;
 use App\Paper;
-use App\RoadCardsTranslation;
+use App\RoadCardTranslation;
 use App\RoadPoint;
 use Redirect;
 use Schema;
@@ -59,7 +59,7 @@ class RoadCardController extends Controller {
         unset($data['translations']);
 		$roadcard = RoadCard::create($data);
 
-        $this->createPaperTranslations($request, $roadcard);
+        $this->createRoadCardTranslations($request, $roadcard);
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -99,7 +99,7 @@ class RoadCardController extends Controller {
 
 		$roadcard->translations()->delete();
 
-        $this->createPaperTranslations($request, $roadcard);
+        $this->createRoadCardTranslations($request, $roadcard);
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -115,7 +115,7 @@ class RoadCardController extends Controller {
 	{
 
 		RoadCard::destroy($id);
-		RoadCardsTranslation::where('roadcard_id', $id)->delete();
+		RoadCardTranslation::where('roadcard_id', $id)->delete();
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -135,7 +135,7 @@ class RoadCardController extends Controller {
             $ids = json_decode($request->get('toDelete'));
         } else {
 
-            $ids = Paper::all()->pluck('id');
+            $ids = RoadCard::all()->pluck('id');
         }
 
         foreach ($ids as $id) {
@@ -146,14 +146,14 @@ class RoadCardController extends Controller {
         return redirect()->route(config('quickadmin.route').'.roadcard.index');
     }
 
-    protected function createPaperTranslations(Request $request, $roadcard)
+    protected function createRoadCardTranslations(Request $request, $roadcard)
     {
         foreach ($request->translations as $key => $value) {
 
             $translation = $value;
             $translation['locale'] = $key;
 
-            $translationObj = new RoadCardsTranslation($translation);
+            $translationObj = new RoadCardTranslation($translation);
             $roadcard->translations()->save($translationObj);
         }
     }

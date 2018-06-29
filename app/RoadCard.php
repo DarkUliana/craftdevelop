@@ -12,7 +12,7 @@ class RoadCard extends Model {
 
     public $translatedAttributes = ['title', 'text'];
 
-    public $translationModel = 'App\RoadCardsTranslation';
+    public $translationModel = 'App\RoadCardTranslation';
 
     public $translationForeignKey = 'roadcard_id';
 
@@ -40,7 +40,7 @@ class RoadCard extends Model {
 
     public function translations()
     {
-        return $this->hasMany('App\RoadCardsTranslation', 'roadcard_id', 'id');
+        return $this->hasMany('App\RoadCardTranslation', 'roadcard_id', 'id');
     }
 
 }

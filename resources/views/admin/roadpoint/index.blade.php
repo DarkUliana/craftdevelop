@@ -18,7 +18,6 @@
                         </th>
                         <th>Name</th>
                         <th>Date</th>
-                        <th>Number</th>
                         <th>Tag</th>
                         <th>Done</th>
 
@@ -32,9 +31,8 @@
                             <td>
                                 {!! Form::checkbox('del-'.$row->id,1,false,['class' => 'single','data-id'=> $row->id]) !!}
                             </td>
-                            <td>{{ $row->name }}</td>
+                            <td>{{ $row->translate('en')->name }}</td>
                             <td>{{ $row->date }}</td>
-                            <td>{{ $row->number }}</td>
                             <td>{{ $row->tag->name }}</td>
                             <td>{{ $row->done }}</td>
 

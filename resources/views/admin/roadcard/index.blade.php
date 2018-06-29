@@ -35,7 +35,7 @@
                             </td>
                             <td>{{ $row->translate('en')->title }}</td>
                             <td>{{ $row->done }}</td>
-                            <td>{{ $row->roadpoint->name }}</td>
+                            <td>{{ $row->roadpoint->translate('en')->name }}</td>
 
                             <td>
                                 {!! link_to_route(config('quickadmin.route').'.roadcard.edit', trans('quickadmin::templates.templates-view_index-edit'), array($row->id), array('class' => 'btn btn-xs btn-info')) !!}

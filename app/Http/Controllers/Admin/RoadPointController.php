@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Language;
+use App\RoadPointTranslation;
 use App\Tags;
 use Redirect;
 use Schema;
@@ -36,9 +38,10 @@ class RoadPointController extends Controller {
 	 */
 	public function create()
 	{
+        $languages = Language::all();
 	    $tags = prepareForSelect(Tags::all());
 	    
-	    return view('admin.roadpoint.create', compact('tags'));
+	    return view('admin.roadpoint.create', compact('tags', 'languages'));
 	}
 
     /**
@@ -51,7 +54,11 @@ class RoadPointController extends Controller {
 	public function store(CreateRoadPointRequest $request)
 	{
 
-		RoadPoint::create($request->all());
+        $data = $request->all();
+        unset($data['translations']);
+		$roadpoint = RoadPoint::create($data);
+
+        $this->createRoadPointTranslations($request, $roadpoint);
 
 		return redirect()->route(config('quickadmin.route').'.roadpoint.index');
 	}
@@ -65,12 +72,11 @@ class RoadPointController extends Controller {
 	 */
 	public function edit($id)
 	{
-
+        $languages = Language::all();
 		$roadpoint = RoadPoint::find($id);
-
         $tags = prepareForSelect(Tags::all());
 
-		return view('admin.roadpoint.edit', compact('roadpoint', 'tags'));
+		return view('admin.roadpoint.edit', compact('roadpoint', 'tags', 'languages'));
 	}
 
 	/**
@@ -84,9 +90,15 @@ class RoadPointController extends Controller {
 	public function update($id, UpdateRoadPointRequest $request)
 	{
 
+        $data = $request->all();
+        unset($data['translations']);
 		$roadpoint = RoadPoint::findOrFail($id);
 
-		$roadpoint->update($request->all());
+		$roadpoint->update($data);
+
+        $roadpoint->translations()->delete();
+
+        $this->createRoadPointTranslations($request, $roadpoint);
 
 		return redirect()->route(config('quickadmin.route').'.roadpoint.index');
 	}
@@ -102,6 +114,7 @@ class RoadPointController extends Controller {
 	{
 
 		RoadPoint::destroy($id);
+		RoadPointTranslation::where('roadpoint_id', $id)->delete();
 
 		return redirect()->route(config('quickadmin.route').'.roadpoint.index');
 	}
@@ -114,14 +127,33 @@ class RoadPointController extends Controller {
      */
     public function massDelete(Request $request)
     {
+        $ids = [];
         if ($request->get('toDelete') != 'mass') {
-            $toDelete = json_decode($request->get('toDelete'));
-            RoadPoint::destroy($toDelete);
+
+            $ids = json_decode($request->get('toDelete'));
         } else {
-            RoadPoint::whereNotNull('id')->delete();
+
+            $ids = RoadPoint::all()->pluck('id');
+        }
+
+        foreach ($ids as $id) {
+
+            $this->destroy($id);
         }
 
         return redirect()->route(config('quickadmin.route').'.roadpoint.index');
+    }
+
+    protected function createRoadPointTranslations(Request $request, $roadpoint)
+    {
+        foreach ($request->translations as $key => $value) {
+
+            $translation = $value;
+            $translation['locale'] = $key;
+
+            $translationObj = new RoadPointTranslation($translation);
+            $roadpoint->translations()->save($translationObj);
+        }
     }
 
 }

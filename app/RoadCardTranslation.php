@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RoadCardsTranslation extends Model
+class RoadCardTranslation extends Model
 {
     protected $guarded = [];
 
