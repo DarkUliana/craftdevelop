@@ -87,6 +87,7 @@ class MainController extends Controller
         $tags = Tags::all();
         $languages = $this->getLanguages();
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
+        setlocale(LC_TIME, 'German');
 
         if (empty($tag)) {
 

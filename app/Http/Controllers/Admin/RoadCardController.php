@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Language;
+use App\Paper;
+use App\RoadCardsTranslation;
 use App\RoadPoint;
 use Redirect;
 use Schema;
@@ -37,9 +40,10 @@ class RoadCardController extends Controller {
 	public function create()
 	{
 
+	    $languages = Language::all();
 	    $roadpoints = prepareForSelect(RoadPoint::all());
 	    
-	    return view('admin.roadcard.create', compact('roadpoints'));
+	    return view('admin.roadcard.create', compact('roadpoints', 'languages'));
 	}
 
 	/**
@@ -51,8 +55,11 @@ class RoadCardController extends Controller {
 	 */
 	public function store(CreateRoadCardRequest $request)
 	{
-	    
-		RoadCard::create($request->all());
+        $data = $request->all();
+        unset($data['translations']);
+		$roadcard = RoadCard::create($data);
+
+        $this->createPaperTranslations($request, $roadcard);
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -66,10 +73,11 @@ class RoadCardController extends Controller {
 	public function edit($id)
 	{
 
+        $languages = Language::all();
 		$roadcard = RoadCard::find($id);
         $roadpoints = prepareForSelect(RoadPoint::all());
 	    
-		return view('admin.roadcard.edit', compact('roadcard', 'roadpoints'));
+		return view('admin.roadcard.edit', compact('roadcard', 'roadpoints', 'languages'));
 	}
 
 	/**
@@ -83,9 +91,15 @@ class RoadCardController extends Controller {
 	public function update($id, UpdateRoadCardRequest $request)
 	{
 
+        $data = $request->all();
+        unset($data['translations']);
 		$roadcard = RoadCard::findOrFail($id);
 
-		$roadcard->update($request->all());
+		$roadcard->update($data);
+
+		$roadcard->translations()->delete();
+
+        $this->createPaperTranslations($request, $roadcard);
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -101,6 +115,7 @@ class RoadCardController extends Controller {
 	{
 
 		RoadCard::destroy($id);
+		RoadCardsTranslation::where('roadcard_id', $id)->delete();
 
 		return redirect()->route(config('quickadmin.route').'.roadcard.index');
 	}
@@ -114,16 +129,33 @@ class RoadCardController extends Controller {
     public function massDelete(Request $request)
     {
 
+        $ids = [];
         if ($request->get('toDelete') != 'mass') {
-            $toDelete = json_decode($request->get('toDelete'));
-            RoadCard::destroy($toDelete);
+
+            $ids = json_decode($request->get('toDelete'));
         } else {
-            RoadCard::whereNotNull('id')->delete();
+
+            $ids = Paper::all()->pluck('id');
+        }
+
+        foreach ($ids as $id) {
+
+            $this->destroy($id);
         }
 
         return redirect()->route(config('quickadmin.route').'.roadcard.index');
     }
 
+    protected function createPaperTranslations(Request $request, $roadcard)
+    {
+        foreach ($request->translations as $key => $value) {
 
+            $translation = $value;
+            $translation['locale'] = $key;
+
+            $translationObj = new RoadCardsTranslation($translation);
+            $roadcard->translations()->save($translationObj);
+        }
+    }
 
 }

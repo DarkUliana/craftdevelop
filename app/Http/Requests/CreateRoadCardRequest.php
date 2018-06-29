@@ -24,8 +24,9 @@ class CreateRoadCardRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'title' => 'required',
-            'roadpoint_id' => 'required',
+            'translations.*.title' => 'required|string',
+            'translations.*.text' => 'required|string',
+            'roadpoint_id' => 'required|integer',
             
 		];
 	}

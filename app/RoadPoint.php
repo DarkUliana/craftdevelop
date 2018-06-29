@@ -13,10 +13,7 @@ class RoadPoint extends Model {
 
     protected $table = 'roadpoints';
     protected $guarded = [];
-    protected $appends = [
-        'month',
-        'year'
-    ];
+
 
     public static function boot()
     {

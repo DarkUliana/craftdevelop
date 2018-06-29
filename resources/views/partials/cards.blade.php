@@ -6,8 +6,8 @@
                     <span class="card__header-text">{{ $card->done?'done':'new' }}</span>
                 </div>
                 <div class="card__body">
-                    <h4 class="card__body-title">{{ $card->title }}</h4>
-                    <p class="card__body-text">{{ $card->text }}</p>
+                    <h4 class="card__body-title">{{ $card->translate($locale)->title }}</h4>
+                    <p class="card__body-text">{{ $card->translate($locale)->text }}</p>
                 </div>
             </div>
         </div>
