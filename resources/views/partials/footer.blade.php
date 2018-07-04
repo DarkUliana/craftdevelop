@@ -39,7 +39,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <button id="btn-close" type="button" class="btn btn--close"></button>
-            <form>
+            <form method="POST" action="{{ url('message') }}">
+                @csrf
                 <div class="modal-header">
                     <b class="modal-header__title">Leave message</b>
                     <span class="modal-header__text">and we will definitely answer you</span>
@@ -48,18 +49,18 @@
                     <div class="modal-form">
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <input class="form-input" autocomplete='name' placeholder="Name" type="text"/></div>
+                                <input class="form-input" name="name" autocomplete='name' placeholder="Name" type="text"/></div>
                         </div>
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <input class="form-input not-valid" autocomplete='email' placeholder="E-mail"
+                                <input class="form-input not-valid" name="email" autocomplete='email' placeholder="E-mail"
                                        type="email" required/>
                                 <div class="invalid-feedback">Error: Your email address is invalid</div>
                             </div>
                         </div>
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <textarea class="form-input" placeholder="Your message" name="" id=""></textarea>
+                                <textarea class="form-input" name="message" placeholder="Your message" id=""></textarea>
                             </div>
                         </div>
                     </div>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Key;
 use App\Language;
+use App\Mail\NewMessage;
+use App\Messages;
 use App\Paper;
 use App\RoadPoint;
 use App\Tags;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
+//use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
 {
@@ -147,5 +150,23 @@ class MainController extends Controller
             $array[$language->code] = $language->menu_name;
         }
         return $array;
+    }
+
+    public function message(Request $request)
+    {
+        $request->validate([
+
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'message' => 'required|string'
+        ]);
+
+        $message = Messages::create($request->all());
+//
+//        \Mail::raw($message->name.PHP_EOL.$message->text, function($msg) {
+//            $msg->subject('New message')->to('riznyk.uliana.a@gmail.com');
+//        });
+
+        return redirect()->back();
     }
 }
