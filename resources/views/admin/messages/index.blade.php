@@ -23,7 +23,7 @@
 
                     <tbody>
                     @foreach ($messages as $row)
-                        <tr>
+                        <tr {{ !$row->show ? 'class=warning':'' }}>
                             <td>
                                 {!! Form::checkbox('del-'.$row->id,1,false,['class' => 'single','data-id'=> $row->id]) !!}
                             </td>

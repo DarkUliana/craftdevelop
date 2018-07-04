@@ -23,7 +23,7 @@ class MessagesController extends Controller {
 	 */
 	public function index(Request $request)
     {
-        $messages = Messages::all();
+        $messages = Messages::orderBy('created_at', 'desc')->get();
 
 		return view('admin.messages.index', compact('messages'));
 	}
@@ -37,8 +37,9 @@ class MessagesController extends Controller {
 	public function edit($id)
 	{
 		$messages = Messages::find($id);
-	    
-	    
+		$messages->show = 1;
+		$messages->save();
+
 		return view('admin.messages.edit', compact('messages'));
 	}
 
