@@ -15,7 +15,7 @@ class AddShowColumnToMessages extends Migration
     {
         Schema::table('messages', function (Blueprint $table) {
 
-            $table->boolean('show');
+            $table->boolean('show')->default(0);
         });
 
     }
