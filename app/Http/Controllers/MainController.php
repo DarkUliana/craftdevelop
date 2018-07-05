@@ -62,12 +62,13 @@ class MainController extends Controller
             return response('Invalid data', 400);
         }
 
+        $languages = $this->getLanguages();
         $keys = Key::all()->keyBy('key');
         $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
         $tagId = Tags::where('name', $request->tag)->first()->id;
         $papers = Paper::where('tag_id', $tagId)->get();
 
-        return view('partials.papers', compact('papers', 'locale', 'keys'));
+        return view('partials.papers', compact('papers', 'locale', 'keys', 'languages'));
 
     }
 
@@ -76,12 +77,15 @@ class MainController extends Controller
 
         $paper = Paper::find($id);
 
+
         if ($paper) {
 
             $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
             $related = Paper::where('id', '<', $id)->limit(3)->get();
+            $keys = Key::all()->keyBy('key');
+            $languages = $this->getLanguages();
 
-            return view('article', compact('paper', 'locale', 'related'));
+            return view('article', compact('paper', 'locale', 'related', 'languages', 'keys'));
         }
 
         abort(404);
