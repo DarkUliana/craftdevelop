@@ -24,7 +24,9 @@ class CreatePapersRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'translations' => 'required',
+            'translations.*.title' => 'required',
+            'translations.*.preview' => 'required',
+            'translations.*.text' => 'required',
             'pictures.main_picture' => 'required',
             'tag_id' => 'required', 
             'date' => 'required',

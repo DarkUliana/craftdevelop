@@ -56,7 +56,7 @@ class PapersController extends Controller
      *
      * * @return mixed
      */
-    public function store(Request $request)
+    public function store(CreatePapersRequest $request)
     {
         $paperData = $request->all();
         unset($paperData['pictures']);
