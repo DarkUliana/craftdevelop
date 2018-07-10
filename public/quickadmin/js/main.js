@@ -16,9 +16,11 @@ $(document).ready(function () {
         ]
     });
 
-    // $('.ckeditor').each(function () {
-    //     CKEDITOR.replace($(this));
-    // });
+    $('.editor').each(function () {
+        CKEDITOR.replace(this, {
+            customConfig: '/js/ckeConfig.js'
+        });
+    });
 
     $('.mass').click(function () {
         if ($(this).is(":checked")) {

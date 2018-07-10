@@ -4,18 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Album;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreatePapersRequest;
+use App\Http\Requests\UpdatePapersRequest;
 use App\Language;
+use App\Paper;
 use App\PaperTranslation;
+use App\Tags;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Redirect;
 use Schema;
-use App\Paper;
-use App\Http\Requests\CreatePapersRequest;
-use App\Http\Requests\UpdatePapersRequest;
-use Illuminate\Http\Request;
-
-use App\Tags;
+use Validator;
 
 
 class PapersController extends Controller
@@ -104,11 +104,11 @@ class PapersController extends Controller
         unset($paperData['pictures']);
         unset($paperData['translations']);
 
-        if($request->hasFile('pictures.main_picture')) {
+        if ($request->hasFile('pictures.main_picture')) {
             $paperData['image'] = $this->createMainImage($request);
         }
 
-        if($request->hasFile('pictures.album')) {
+        if ($request->hasFile('pictures.album')) {
             $paper->albumImages()->delete();
             $this->createPaperAlbum($request, $paper);
         }
@@ -233,4 +233,45 @@ class PapersController extends Controller
         return $filename;
     }
 
+
+    public function ckeditorUpload(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+
+            'upload' => 'required|image',
+        ]);
+
+        if ($validator->fails()) {
+
+            $result = [
+                'uploaded' => 0,
+                'error' => [
+                    'message' => "The file is not an image"
+                ]
+            ];
+
+            return $result;
+        }
+
+//        $funcNum = $request->input('CKEditorFuncNum');
+
+        $image = $request->file('upload');
+        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+        $path = public_path('img/ckeditor/' . $filename);
+        $url = url('img/ckeditor/' . $filename);
+        $img = Image::make($image->getRealPath());
+        $img->save($path);
+
+        $result = [
+            'uploaded' => 1,
+            'url' => $url,
+            'value' => $path,
+            'error' => [
+                'message' => "The file already exist and has been renamed to $filename"
+            ]
+        ];
+
+        return $result;
+    }
 }

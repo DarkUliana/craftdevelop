@@ -27,3 +27,5 @@ Route::get('policy', 'MainController@policy');
 Route::post('message', 'MainController@message');
 
 Route::get('setlocale/{locale}', 'MainController@setLocale');
+
+Route::post('ckeditor-upload', 'Admin\PapersController@ckeditorUpload');

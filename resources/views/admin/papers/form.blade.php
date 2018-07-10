@@ -34,7 +34,7 @@
                             array('class'=>'control-label')) !!}
                             {!! Form::textarea('translations['.$language->code.'][text]', old('text',
                             isset($paper)?$paper->translate($language->code)->text:''),
-                            array('class'=>'form-control ckeditor')) !!}
+                            array('class'=>'form-control editor')) !!}
                         </div>
                         </p>
                     </div>
