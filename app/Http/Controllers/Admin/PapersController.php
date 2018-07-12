@@ -192,16 +192,18 @@ class PapersController extends Controller
     protected function createPaperAlbum(Request $request, $paper)
     {
 
-        foreach ($request->file('pictures.album') as $picture) {
+        if ($request->file('pictures.album')) {
+            foreach ($request->file('pictures.album') as $picture) {
 
-            $filename = uniqid() . '.' . $picture->getClientOriginalExtension();
-            $path = public_path('img/blog/albums/' . $filename);
-            $img = Image::make($picture->getRealPath());
+                $filename = uniqid() . '.' . $picture->getClientOriginalExtension();
+                $path = public_path('img/blog/albums/' . $filename);
+                $img = Image::make($picture->getRealPath());
 
-            $img->save($path);
+                $img->save($path);
 
-            $albumImage = new Album(['image' => $filename]);
-            $paper->albumImages()->save($albumImage);
+                $albumImage = new Album(['image' => $filename]);
+                $paper->albumImages()->save($albumImage);
+            }
         }
     }
 
@@ -222,7 +224,7 @@ class PapersController extends Controller
     {
 
         $main_img = $request->file('pictures.main_picture');
-        $filename = uniqid() . '.' . $main_img->getClientOriginalExtension();
+        $filename = 'main_' . uniqid() . '.' . $main_img->getClientOriginalExtension();
         $path = public_path('img/blog/' . $filename);
         $previewPath = public_path('img/blog/previews/' . $filename);
         $img = Image::make($main_img->getRealPath());
@@ -257,7 +259,7 @@ class PapersController extends Controller
 //        $funcNum = $request->input('CKEditorFuncNum');
 
         $image = $request->file('upload');
-        $filename = uniqid() . '.' . $image->getClientOriginalExtension();
+        $filename = 'ckeditor_' . uniqid() . '.' . $image->getClientOriginalExtension();
         $path = public_path('img/ckeditor/' . $filename);
         $url = url('img/ckeditor/' . $filename);
         $img = Image::make($image->getRealPath());

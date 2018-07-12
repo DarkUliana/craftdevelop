@@ -33,16 +33,16 @@
                 {!! $paper->text !!}
                 <div class="slider">
                     <div class="slider-for">
-                        @foreach($paper->albumImages() as $image)
+                        @foreach($paper->albumImages as $image)
                             <div class="slider__item">
-                                <img src="{{ asset('img/blog/' . $image->image) }}" alt="{{ $image->image }}">
+                                <img src="{{ asset('img/blog/albums/' . $image->image) }}" alt="{{ $image->image }}">
                             </div>
                         @endforeach
                     </div>
                     <div class="slider-nav">
-                        @foreach($paper->albumImages() as $preview)
+                        @foreach($paper->albumImages as $preview)
                             <div class="slider-nav__item">
-                                <img src="{{ asset('img/blog/' . $preview->image) }}" alt="{{ $preview->image }}">
+                                <img src="{{ asset('img/blog/albums/' . $preview->image) }}" alt="{{ $preview->image }}">
                             </div>
                         @endforeach
                     </div>

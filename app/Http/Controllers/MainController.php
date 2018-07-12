@@ -35,10 +35,10 @@ class MainController extends Controller
         if ($request->ajax()) {
 
             $tag = Tags::where('name', $request->tag)->first();
-            $papers = Paper::where('tag_id', $tag->id)->paginate($perPage);
+            $papers = Paper::where('tag_id', $tag->id)->latest()->paginate($perPage);
             $return = [
 
-                'papers' => (string)view('partials.papers', compact('papers', 'locale')),
+                'papers' => (string)view('partials.papers', compact('papers', 'locale', 'keys')),
                 'nextPageUrl' => url('blog?page=' . ($request->page + 1) . '&tag=' . $tag->name)
             ];
 
@@ -48,7 +48,7 @@ class MainController extends Controller
         $title = 'Blog';
         $tags = Tags::all();
         $languages = $this->getLanguages();
-        $papers = Paper::where('tag_id', $tags->first()->id)->paginate($perPage);
+        $papers = Paper::where('tag_id', $tags->first()->id)->latest()->paginate($perPage);
         $active = $tags->first()->name;
 
         return view('blog', compact('tags', 'title', 'papers', 'locale', 'active', 'languages', 'keys'));
@@ -75,8 +75,7 @@ class MainController extends Controller
     public function paper($id)
     {
 
-        $paper = Paper::find($id);
-
+        $paper = Paper::findOrFail($id);
 
         if ($paper) {
 
