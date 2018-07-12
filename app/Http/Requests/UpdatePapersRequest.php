@@ -25,7 +25,7 @@ class UpdatePapersRequest extends FormRequest {
 	{
 		return [
             'translations.*.title' => 'required',
-            'translations.*.preview' => 'required',
+            'translations.*.text_preview' => 'required',
             'translations.*.text' => 'required',
             'tag_id' => 'required',
             'date' => 'required',

@@ -25,7 +25,7 @@ class CreatePapersRequest extends FormRequest {
 	{
 		return [
             'translations.*.title' => 'required',
-            'translations.*.preview' => 'required',
+            'translations.*.text_preview' => 'required',
             'translations.*.text' => 'required',
             'pictures.main_picture' => 'required',
             'tag_id' => 'required', 
