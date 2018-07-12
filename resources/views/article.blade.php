@@ -30,7 +30,7 @@
                 <span class="view">{{ $paper->views }}</span>
             </div>
             <div class="art-item__body">
-                {!! $paper->text !!}
+                {!! $paper->translate($locale)->text !!}
                 <div class="slider">
                     <div class="slider-for">
                         @foreach($paper->albumImages as $image)
