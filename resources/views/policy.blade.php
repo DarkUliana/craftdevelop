@@ -1,3 +1,7 @@
+@include('partials.head')
+
+<div class="page">
+
 @include('partials.header')
     <!-- BEGIN content -->
     <div class="container">
@@ -109,3 +113,5 @@
     </div>
     <!-- END content -->
 @include('partials.footer')
+</div>
+@include('partials.scripts')

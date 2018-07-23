@@ -4,15 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Key;
 use App\Language;
-use App\Mail\NewMessage;
 use App\Messages;
 use App\Paper;
 use App\RoadPoint;
 use App\Tags;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cookie;
+
+//use App\Mail\NewMessage;
 //use Illuminate\Support\Facades\Mail;
 
 class MainController extends Controller
@@ -21,16 +21,18 @@ class MainController extends Controller
     {
         $keys = Key::all()->keyBy('key');
         $languages = $this->getLanguages();
-        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
-        $title = 'Index page';
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
+        $title = $keys['title_index']->translate($locale)->name;
+
         return view('page', compact('title', 'languages', 'locale', 'keys'));
     }
 
     public function blog(Request $request)
     {
+
         $keys = Key::all()->keyBy('key');
         $perPage = Config::get('per_page', 3);
-        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
 
         if ($request->ajax()) {
 
@@ -45,7 +47,7 @@ class MainController extends Controller
             return $return;
         }
 
-        $title = 'Blog';
+        $title = $keys['title_blog']->translate($locale)->name;
         $tags = Tags::all();
         $languages = $this->getLanguages();
         $papers = Paper::where('tag_id', $tags->first()->id)->latest()->paginate($perPage);
@@ -64,7 +66,7 @@ class MainController extends Controller
 
         $languages = $this->getLanguages();
         $keys = Key::all()->keyBy('key');
-        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
         $tagId = Tags::where('name', $request->tag)->first()->id;
         $papers = Paper::where('tag_id', $tagId)->get();
 
@@ -77,26 +79,34 @@ class MainController extends Controller
 
         $paper = Paper::findOrFail($id);
 
-        if ($paper) {
+        if (!$paper) {
 
-            $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
-            $related = Paper::where('id', '<', $id)->limit(3)->get();
-            $keys = Key::all()->keyBy('key');
-            $languages = $this->getLanguages();
-
-            return view('article', compact('paper', 'locale', 'related', 'languages', 'keys'));
+            abort(404);
         }
 
-        abort(404);
+        ++$paper->views;
+        $paper->save();
+
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
+        $title = $paper->translate($locale)->title;
+        $related = Paper::where('id', '<', $id)->limit(3)->get();
+        $keys = Key::all()->keyBy('key');
+        $languages = $this->getLanguages();
+
+        return view('article', compact('paper', 'locale', 'related', 'languages', 'keys', 'title'));
+
+
     }
 
     public function roadmap($tag = '')
     {
-        $title = 'Roadmap';
+
         $keys = Key::all()->keyBy('key');
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
+        $title = $keys['title_roadmap']->translate($locale)->name;
         $tags = Tags::all();
         $languages = $this->getLanguages();
-        $locale = Cookie::get('locale')?Cookie::get('locale'):Config::get('app.locale');
+
         setlocale(LC_TIME, $locale);
 
         if (empty($tag)) {
@@ -136,7 +146,7 @@ class MainController extends Controller
 
     public function setLocale($locale)
     {
-       $cookie = Cookie::forever('locale', $locale);
+        $cookie = Cookie::forever('locale', $locale);
 
         Config::set('locale', $locale);
 
@@ -171,5 +181,15 @@ class MainController extends Controller
 //        });
 
         return redirect()->back();
+    }
+
+    public function policy()
+    {
+        $locale = Cookie::get('locale') ? Cookie::get('locale') : Config::get('app.locale');
+        $keys = Key::all()->keyBy('key');
+        $title = $keys['title_policy']->translate($locale)->name;
+        $languages = $this->getLanguages();
+
+        return view('policy', compact('languages', 'keys', 'locale', 'title'));
     }
 }

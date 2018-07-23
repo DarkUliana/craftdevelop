@@ -91,7 +91,7 @@ class KeyController extends Controller {
 
         $key->translations()->delete();
 
-        $this->createRoadCardTranslations($request, $key);
+        $this->createKeyTranslations($request, $key);
 
 		return redirect()->route(config('quickadmin.route').'.key.index');
 	}

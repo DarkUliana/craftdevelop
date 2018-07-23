@@ -42,31 +42,31 @@
             <form method="POST" action="{{ url('message') }}">
                 @csrf
                 <div class="modal-header">
-                    <b class="modal-header__title">Leave message</b>
-                    <span class="modal-header__text">and we will definitely answer you</span>
+                    <b class="modal-header__title">{{ $keys['form_caption']->translate($locale)->name }}</b>
+                    <span class="modal-header__text">{{ $keys['form_subtitle']->translate($locale)->name }}</span>
                 </div>
                 <div class="modal-body">
                     <div class="modal-form">
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <input class="form-input" name="name" autocomplete='name' placeholder="Name" type="text"/></div>
+                                <input class="form-input" name="name" autocomplete='name' placeholder="{{ $keys['form_name']->translate($locale)->name }}" type="text"  required/></div>
                         </div>
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <input class="form-input not-valid" name="email" autocomplete='email' placeholder="E-mail"
+                                <input class="form-input not-valid" name="email" autocomplete='email' placeholder="{{ $keys['form_edit_mail']->translate($locale)->name }}"
                                        type="email" required/>
-                                <div class="invalid-feedback">Error: Your email address is invalid</div>
+                                {{--<div class="invalid-feedback">Error: Your email address is invalid</div>--}}
                             </div>
                         </div>
                         <div class="modal-form__item">
                             <div class="input-wrap">
-                                <textarea class="form-input" name="message" placeholder="Your message" id=""></textarea>
+                                <textarea class="form-input" name="message" placeholder="{{ $keys['form_edit_message']->translate($locale)->name }}" id="" required></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn--block btn--transition btn--light">Send Message</button>
+                    <button class="btn btn--block btn--transition btn--light">{{ $keys['form_button']->translate($locale)->name }}</button>
                 </div>
             </form>
         </div>

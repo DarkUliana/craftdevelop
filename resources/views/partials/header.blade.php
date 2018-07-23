@@ -2,30 +2,30 @@
     <div class="container">
         <div class="row jc-space-between ai-center">
             <div class="main-header__logo">
-                <img width="145" height="50" class="logo__img" src="{{ asset('img/logo.png') }}"
-                     alt="CraftDevelopment"></div>
+                <a href="{{ env('APP_URL') }}"><img width="145" height="50" class="logo__img" src="{{ asset('img/logo.png') }}"
+                     alt="CraftDevelopment"></a></div>
             <nav class="main-nav">
                 <ul class="nav-links">
                     <li class="nav-item">
-                        <a href="{{ url('/') }}">Main</a>
+                        <a href="{{ url('/') }}">{{ $keys['one_point_menu']->translate($locale)->name }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('blog') }}">DevBlog</a>
+                        <a href="{{ url('blog') }}">{{ $keys['two_point_menu']->translate($locale)->name }}</a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ url('roadmap') }}">Roadmap</a>
+                        <a href="{{ url('roadmap') }}">{{ $keys['three_point_menu']->translate($locale)->name }}</a>
                     </li>
                 </ul>
                 <ul class="social-links">
                     <li class="nav-item">
-                        <a class="btn btn--transition-simple" href="#">Facebook</a>
+                        <a class="btn btn--transition-simple" href="https://www.facebook.com/CraftDevelop/?fref=ts">Facebook</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn--transition-simple" href="#">Twitter</a>
+                        <a class="btn btn--transition-simple" href="https://twitter.com/CraftDevelop?lang=uk">Twitter</a>
                     </li>
                     -
                     <li class="nav-item">
-                        <a class="btn btn--transition-simple" href="#">Instagram</a>
+                        <a class="btn btn--transition-simple" href="https://www.instagram.com/craftdevelopment/">Instagram</a>
                     </li>
                 </ul>
                 <div class="dropdown main-nav__dropdown">

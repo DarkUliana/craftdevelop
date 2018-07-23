@@ -21,7 +21,7 @@
         <div class="form-group">
             {!! Form::label('key', 'key*', array('class'=>'col-sm-2 control-label')) !!}
 
-            {!! Form::text('key', old('key',$key->key), array('class'=>'form-control')) !!}
+            {!! Form::text('key', old('key',$key->key), array('class'=>'form-control', 'readonly'=>'true')) !!}
         </div>
 
         <div class="panel panel-success" style="border-radius: 5px !important; border: solid 3px #d6e9c6;">

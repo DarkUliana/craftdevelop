@@ -24,7 +24,7 @@ class UpdateKeyRequest extends FormRequest {
 	public function rules()
 	{
 		return [
-            'key' => 'required|alpha_dash|unique:key,key,'.$this->key,
+            'key' => 'required|string',
             'translations.*.name' => 'required|string'
 		];
 	}
